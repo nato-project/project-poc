@@ -76,12 +76,15 @@ for r in range(0, tfidf_matrix.shape[0]):
                 #test = df_links[df_links.source.isin([ids[r],ids[c]])];
                 #print(test);
 
+    # To get the max weighted word in a document
+    #amax = np.amax(tfidf_array[r]);
+    #node_word = "";
+    #if amax > 0:
+    #    argmax = np.argmax(tfidf_array[r]);
+    #    node_word = bow_features[argmax];
 
-    amax = np.amax(tfidf_array[r]);
-    node_word = "";
-    if amax > 0:
-        argmax = np.argmax(tfidf_array[r]);
-        node_word = bow_features[argmax];
+    # Get top 3 words from a document
+    top_words = tfidf_array[r].argsort()[-3:][::-1];
 
     #nodes.append({"name":str(corpus[r]),"id":str(ids[r]),"type":str(types[r]),"word":node_word});
 
