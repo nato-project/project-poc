@@ -1,0 +1,47 @@
+
+
+# for index, row in df_nodes.iterrows():
+#     found = False;
+#     # Check if the node already exist in cluster
+#     if any(df_cluster_nodes["node"] == row['node']):
+#         found = True;
+#     else:
+#         # Find all targets for the node
+#         targets = df_links[df_links.source.isin([row['node']])];
+#         for tind, t in targets.iterrows():
+#             if found == False:
+#                 # Check if Target exists in cluster
+#                 found_node = df_cluster_nodes[df_cluster_nodes.node.isin([t['target']])];
+#                 if found_node.shape[0] > 0:
+#                     found = True;
+#                     #print(found_node.loc[found_node.index[0], 'group']);
+#                     df_cluster_nodes.loc[len(df_cluster_nodes)] = {"node":row['node'],"group":found_node.loc[found_node.index[0], 'group'],"name":row['name'],"type":row['type']};
+#
+#         if found == False:
+#             gnum = gnum +1;
+#             found = True;
+#             df_cluster_nodes.loc[len(df_cluster_nodes)] = {"node":row['node'],"group":gnum,"name":row['name'],"type":row['type']};
+
+
+
+# for index, row in df_links.iterrows():
+#     find = df_cluster_nodes[df_cluster_nodes.node.isin([row['source']])];
+#     if find.shape[0] > 0:
+#         gnum = find.loc[find.index[0], 'group'];
+#         find = df_cluster_nodes[df_cluster_nodes.node.isin([row['target']])];
+#         if find.shape[0] == 0:
+#             node_details = df_nodes[df_nodes.node.isin([row['target']])];
+#             df_cluster_nodes.loc[len(df_cluster_nodes)] = {"node":row['target'],"group":gnum,"name":node_details.loc[node_details.index[0], 'name'],"type":node_details.loc[node_details.index[0], 'type']};
+#     else:
+#         find = df_cluster_nodes[df_cluster_nodes.node.isin([row['target']])];
+#         if find.shape[0] > 0:
+#             gnum = find.loc[find.index[0], 'group'];
+#             node_details = df_nodes[df_nodes.node.isin([row['source']])];
+#             df_cluster_nodes.loc[len(df_cluster_nodes)] = {"node":row['source'],"group":gnum,"name":node_details.loc[node_details.index[0], 'name'],"type":node_details.loc[node_details.index[0], 'type']};
+#         else:
+#             gnum = max(grouplist)+1;
+#             grouplist.append(gnum);
+#             node_details = df_nodes[df_nodes.node.isin([row['source']])];
+#             df_cluster_nodes.loc[len(df_cluster_nodes)] = {"node":row['source'],"group":gnum,"name":node_details.loc[node_details.index[0], 'name'],"type":node_details.loc[node_details.index[0], 'type']};
+#             node_details = df_nodes[df_nodes.node.isin([row['target']])];
+#             df_cluster_nodes.loc[len(df_cluster_nodes)] = {"node":row['target'],"group":gnum,"name":node_details.loc[node_details.index[0], 'name'],"type":node_details.loc[node_details.index[0], 'type']};
