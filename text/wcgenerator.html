@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Word Cloud Generator</title>
+<style>
+body {
+  position: relative;
+  font-family: "Helvetica Neue", sans-serif;
+  width: 960px;
+  margin: auto;
+  margin-bottom: 1em;
+  margin-top: 20px;
+}
+#presets a { border-left: solid #666 1px; padding: 0 10px; }
+#presets a.first { border-left: none; }
+#keyword { width: 300px; }
+#fetcher { width: 500px; }
+#keyword, #go { font-size: 1.5em; }
+#text { width: 100%; height: 100px; }
+p.copy { font-size: small; }
+#form { font-size: small; position: relative; }
+hr { border: none; border-bottom: solid #ccc 1px; }
+a.active { text-decoration: none; color: #000; font-weight: bold; cursor: text; }
+#angles line, #angles path, #angles circle { stroke: #666; }
+#angles text { fill: #333; }
+#angles path.drag { fill: #666; cursor: move; }
+#angles { text-align: center; margin: 0 auto; width: 350px; }
+#angles input, #max { width: 42px; }
+</style>
+
+<div id="vis"></div>
+
+<form id="form">
+
+<p style="position: absolute; right: 0; top: 0" id="status"></p>
+
+<div style="text-align: center">
+  <div id="presets"></div>
+  <div id="custom-area">
+    <p><label for="text">Paste your text below!</label>
+    <p><textarea id="text">
+IEDs were found and disposed by Combat Engineers TBC if they were just landmines
+An IED was blown up in front of a ROSHEN shop Shopping Center
+A device was detonated against a restaurant (LKafa) Boulevard Lesi Ukrainian
+Call reporting IED - First Responders action - no explosive Central Metro/bus station
+An IED was found and disposed by EOD
+A cache with 3 IEDs with TNT was found and cleared Inside an abandoned house
+An IED was detonated against a store in Franko Street
+Several landmines, 800 gr of TNT and electric detonators were found
+A device was blown up damaging a power substation
+A cache was discovered: weapons, 1 Kg TNT & electric detonators Near a pump station
+IED attack against a power substation
+Call reporting IED - First Responders action - no explosive Lukyanovska Metro station
+Near the railway, 500 gr of plastic explosive were found
+3 detonators & 600 gr TNT
+A Command-Wired IED was found near a road close to a gas pipeline 800 gr TNT & electric detonators
+Four electrical towers were blown up Electrical power to Crimea was disrrupted
+An IED was found in front of the City Council 800 gr TNT& detonating cord, but without any fuze or switch
+Two electrical towers were blown up Electrical power to Crimea was disrrupted
+Ammunition, explosives and detonators were found
+2,5 Kg of plastic explosive were found
+Call reporting IED - First Responders action - no explosive Teatralna & Kreshatyk Metro stations
+Call reporting IED - First Responders action - no explosive Threat against all MCDONALDS restaurants
+5 Kg of TNT were found along with weapons and ammunition
+Call reporting IED - First Responders action - no explosive Central Metro station
+After the search of a van, 2 detonators & 400 gr of TNT were found
+Call reporting IED - First Responders action - no explosive It was a suitcase in front of a polling station
+An IED was detonated between Atlantic & Lviv Streets
+Call reporting IED - First Responders action - no explosive Railway Central station
+An IED was detonated
+Detonators, TNT and plastic explosive were seized
+A civilian car was affected by the detonation on an IED
+Weapons, grenades and ammunition found along with 1 Kg TNT
+A cache with TNT and rockets was found
+Several 120 mm artillery rounds were found protected by an IED Composed of TNT & artillery fuzes
+A man was killed after the detonation of an improvised hand grenade
+Two caches with explosives were discovered
+Explosives were found inside a garbage container
+2 Kg of TNT were seized after a search for weapons and ammo
+Explosives were found hidden in the roof of a house
+An IED was used against a night club
+ Ammunition depot was blown up after an IED detonation It causes the detonation of about 3500 tons of ammunition
+A DNR militant was detained with 100 gr of TNT
+Rockets, grenades and explosives were found
+A cache with explosives was discovered near a monastery Pokrovsky monastery, University Street
+9 Kg of TNT and several detonators were seized
+Detonators and TNT were found
+Grenades and 400 gr of TNT were found
+More than 20 Kg of TNT were seized after a search
+The detonation of an IED caused injuries to one soldier
+Weapons, 1.1 Kg TNT and landmines were found
+Detonation of a device inside an apartment
+Call reporting IED - First Responders action - no explosive Khmelnytsky Boulevard
+Weapons, ammunition & explosives were discovered in a search
+Explosives were found during a search for weapons 20 Kg TNT, 7 m detonating cord & 7 electric detonators
+Black powder and explosives were seized during a vehicle search
+2 Kg of TNT were found along with weapons
+An IED was detonated in a parking area
+A device was blown up against a caf_
+Detonators and munitions were found during a search
+Weapons, explosives and detonators were discovered
+Explosives found
+Weapons, gunpowder and explosives were found ¾Not clear if explosives were munition or explosives in fact
+A man was detained with explosives 11 Kg of plastic explosive along with 5 electric detonators
+A suspected IED emplacer was killed by his own IED In front of a school
+Detonation of a device against Poland Consulate It was emplaced inside a garbage can
+An IED was blown up against in the railroad Station "kupiansk-Uzlovy"
+Some weapons were found along with explosives TNT and plastic explosive
+A device was blown up against an enlistment office 200 gr TNT equivalent
+Arms dealers were detained: explosives found
+Explosives and weapons were found
+Call reporting IED - First Responders action - no explosive City center
+A man was detained when trying to emplace an IED Against a check point in the road
+One soldier was killed after the detonation of an IED
+One arms dealer was detained in possession of explosives TNT blocks (4,6 Kg)
+Explosives and detonators were seized
+Explosives and detonators were seized
+A device was blown up in a railway station In "Southern Vzryvpaket" station. Suspect was detained hours later.
+A device detonated in central railway station Not confirmed
+IED attack against the building of UKR Security Service (SBU/???) 5-7  Kg TNT equivalent. It was claimed by "???????? ????????"
+Call reporting IED - First Responders action - no explosive Central railway station
+Several IEDs were found protecting a cache withy missiles
+An IED blown up during a military tank competition It was hidden inside a combat vehicles battery compartment
+Several IEDs were found under Ukrainian soldiers corpses
+3 suspects were detained when r-trying to blow a bridge up Explosives and detonators were seized
+Explosives found after detention of 4 suspects One complete IED, other explosives and weapons
+Explosives were found during vehicle search in a check point Detonating cord, detonators and military ordnance as main charge
+A cache with weapons, ammunition and TNT was discovered
+A large cache of weapons and explosives was discovered
+Two women wounded after triggering an IED
+4 KG of TNT and other ammunition were found in a warehouse They were packed in white bags marked as "Novorossiya Aid Foundation"
+A device was detonated in a residential area
+A man was discovered when trying to plant an IED near a check point Reported as RC switch (mobile phone), 400 gr TNT block as main charge
+Explosives and weapons were found
+An IED was found in front of a National Guard Unit Headquarters 400 gr TNT equivalent
+Explosives were found in a cache
+A cache with weapons and explosives was discovered
+An IED was found and disposed by emergency services (SSU)
+A cache was discovered near Artemivsk-Lysychansk road
+A homemade grenade was blown up in the street
+Another cache was discovered after investigation
+A device detonated affecting two persons
+A cache was discovered and TNT was found inside
+A homemade hand grenade was thrown against a business office
+A device was blown up causing a fire with the result of a dead man
+A soldier of national Guard was killed after a device detonated Possible hand grenade (TBC)
+Call reporting IED - First Responders action - no explosive Near "Arsenalnaya" metro station
+A cache was found in an abandoned factory 33 Kg of TNT
+A cache with explosives and weapons was found
+A suspect was detained when trying to sell explosives 20 Kg of TNT
+600 gr of TNT were found in a cache along with weapons & ammo
+A cache wit weapons and  explosives was found 18x200 gr TNT, 4x400 gr TNT & 24 detonators
+A suspect was detained. Weapons and TNT were seized
+IED attack against an office of "Sberbank" Victory Avenue
+IED attack against gas pipeline "Moscow-Stavropol"
+An IED laboratory was discovered after detention of suspects A complete IED & some components were found
+An IED laboratory was dismantled They were manufacturing TATP & improvised detonators
+IEDs & explosives were found after detention of 2 suspects
+Flash powder & munitions were found in a suspects home
+Explosives were seized during a search 4 Kg TNT, plastic explosive and munitions
+Two devices were detonated against a volunteers office Youth Center
+One suspect was detained in possesion of flash powder In "Mezhevaya" train station
+Call reporting IED - First Responders action - no explosive Metro station in Independence Square
+A train transporting coal was derailed due to detonation of a device Second IED failed: TM-62M mine & 4x400 gr TNT as main charge
+IED components and schemes found during a detention of suspects
+Homemade grenade was found in the roof of a kindergarten Novoznerenska St
+A guy was detained with fuzes and detonators inside a backpack Vokzalnaya metro station
+An urdenbelly IED was found under a car Krasnov St., 100 gr TNT.
+Suspects were detained while laying an IED against the railway 2.5 Kg TNT
+Some explosives were found during the seize of an arsenal
+A car was affected by the detonation of an IED The driver died
+A homemade grenade was found in the roof of a kiosk
+A modified hand grenade was found inside a suspects bag
+Fuzes and detonators found along with weapons and equipment
+Cache with explosives was found near a railway station Novomoskov station
+An IED was detonated against bar "BIKINI"
+Some guys were detained when trying to sell radioactive material Reported as Uranium 238 by SBU
+After a shooting, some explosives were found during detentions Detonators, detonating cord and weapons
+Call reporting IED - First Responders action - no explosive Sumy Street
+An IED was thrown against the NGO "Self-Defences of Odessa" 200 gr TNT-equivalent. Kanatnaya Street. From a motorcycle.
+A portion of railway was blown up Sentyanivka-Shipilova Stretch (6th attack in the same site)
+Call reporting IED - First Responders action - no explosive Rymarska Street
+Call reporting IED - First Responders action - no explosive General Prosecutors Office of Ukraine
+A suspect was detained in possesion of explosives and weapons 500 gr TNT and black powder
+A cache was found by members of DONBASS Batallion Some explosives were found along with weapons
+An Ukrainian soldier was detained with some explosives Plastic explosive & fuzes. Forest metro station.
+Call reporting IED - First Responders action - no explosive Dorohozhychi Metro Station
+Explosives were seized after the detention of 2 criminal groups 5 TNT blocks (200 gr each)
+Call reporting IED - First Responders action - no explosive Regional philharmonic hall . HOAX caller was detained
+Explosives seized after a search done by border patrols 10 TNT blocks, along with rocket launchers and hand grenades
+An IED was found close to a gas station  Pressure plate
+The trunk of a car owned by a bussinesmen was blown up Reasons of explosion are not clear (It could be an accident instead an IED)
+A device blew up at the door of Caf_ "Liberty" Richelieu Street (04:00 AM)
+A car was blown up Akademika Pavlova Street
+A device was found under a house and disposed 2 TM-62M landmines as main charge, TNT block as booster and detonators
+A suspect was detained after a search in his house 8 TNT blocks, plastic explosive and 15 electric detonators, plus weapons
+Call reporting IED - First Responders action - no explosive 2 sites: Hotel "Khrarkov" & Migration Service office (Rymarska Street)
+Explosives were seized after the detention of a suspect of attacks About 50 Kg of explosives and detonators, along with weapons
+Call reporting IED - First Responders action - no explosive 5 governmental facilities
+A suspect was detained when trying to lay an IED near a train station "Kharkiv-Pasazhyrskiy" station. 2,5 Kg TNT
+An IED manufacturer was detained Involved in some IED attacks in Odessa. Components of IEDs were seized
+IED attack against a secondary door of an Office of District Police Yuri Lipa Street. Todays second IED attack against Police Stations in Lviv
+A device blew up in the entrance to an Office of District Police Plugova Street
+The car of the secretary of DNR Head was attacked with an IED Kuibyshev  district (Potential Underbelly under passenger seat)
+Explosives were seized from a car search in a Police check point 4 blocks of TNT, 1200 gr of plastic explosive, 3 detonators, and weapons
+Call reporting IED - First Responders action - no explosive 4 government sites all around the city
+IED was disposed in a bus stop near central market 200 gr TNT, mechanical time delay switch, batteries, and metal pieces
+A guy was detained when trying to lie a device in a bakery plant He confessed a group threated him and his family in order to do it
+There was a detonation in a kiosk close to a bus stop Bus stop "Shevchenko Park". A gas cilinder blew up (TBC if IED or accident)
+A bridge over Kalmius river affected by the detonation of a device
+2 Kg of TNT were found along with hand grenades and ammunition Near a water station in Svyatoshinsky district
+Two servicemen were detained in a minibus with explosives Road Zhytomyr- Chernivtsi . 3 Kg of flash powder, TNT
+A cache with explosives was found in a destroyed plant 10 Kg TNT plus electric detonators, landmines, hand grenadesÄ
+An IED close to a billboard was disposed by Police Between Cosmonauts St and General Petrov St. Reported as RCIED (TBC)
+Detention of a group planning to blown a bridge up Explosives seized. They planned to attack Ingul & Varvarovskogo bridges.
+A cache protected by IEDs was found Some IEDs were found along with hand grenades and ammunition
+IED was detonated against a political party local office Office of political party â???????????Ž (Fatherland).
+Call reporting IED - First Responders action - no explosive Rymarska Street
+A device was blown up against a restaurant "?????????" (Angelov) Caf_ (400-650 gr TNT equivalent).
+About 4 Kg of explosive were found in a weapons cache Darnitsky district
+During the detention of suspects, explosives were seized 400 grams of TNT along with weapons
+IED attack damaged railroad and a locomotive
+A device was blown up close to a university hostel Near "Oleksiivska" Metro Station. Two more explosions reported during night
+Call reporting IED - First Responders action - no explosive Against a gas pipeline. Caller was identified and detained.
+Call reporting IED - First Responders action - no explosive Rymarska Street
+Explosives and components for IEDs were seized Along with weapons, during the detention of a suspect group
+Explosives and weapons were found inside a private house About one hundred TNT blocks, three kilos of plastic explosive, detonators
+A portion of railway was blown up
+Call reporting IED - First Responders action - no explosive Legal College, owned by Peoples Deputy Sergey Kivalov,  in Biskvitny Lane
+Some explosives were found after the detention of suspects
+A device detonated when trying to open an abandoned bag Possible VOIED
+A roadside IED was found Electric detonator, TNT block & VOG-25 grenade as main cahrge
+A patrol car was blown up in front of its Police Station Chuprinky Street. VAZ-2109 car of Frankivskiy district Police Department
+Explosives were found during a search after some detentions 25 + 12 Kg of plastic explosive found in the house of a suspect‚s parents
+Call reporting IED - First Responders action - no explosive Central railway station
+Call reporting IED - First Responders action - no explosive Against District Court
+IEDs were detonated against offices of "Sberbank of Russia" Akhmatova Street & Kurenivka Street
+Road bridge between Popasna and Troyitske was blown up
+2 suspected IEDs were found laid under railway TM-62M landmines as main charge. No evidence of switch, possible HOAX
+A civilian was injured by a device activated through tripwire It is not clear if it was a landmine or an IED
+IED was detonated against Sdovoba party local office
+Suspicious IED - First Responders action - no explosive Liberty Square
+Explosives were seized durig the detntion of suspects TNT
+Call reporting IED - First Responders action - no explosive Against "Derzhprom" & "Universytet " metro station in Svobody Square
+IED used against residence of Regional State governor
+A soldier was killed due to the detonation of an IED
+IED attack against a railway bridge 6 more IEDs were found. Artillery shells aused as main charge.
+A device was blown up In the crossing of Admiralsky Avenue and Krasnova Street
+IED attack against a railway bridge
+A device was blown up against a billboard with patriotic message (200 gr TNT equ) Between Velika Arnautska St & Staroportofranskivska St
+2 suspects were detained while transporting explosive and weapons 370 gr of plastic explosive
+A device was blown up against railway Between "Yasinovataya" & "Skotovataya" stations
+12 Kg of plastic explosive were seized after a detention of suspects
+Explosive and weapons were seized inside a car during a road control Some quantities of TNT and plastic explosive, along with rockets
+Call reporting IED - First Responders action - no explosive Against "Derzhprom" & "Universytet " metro station
+A man was detained while trying to use an IED against a gas pipeline Urengoy_Pomary_Uzhgorod pipeline, near "Ukrtransgaz"operation center
+A homemade sea mine detonated against a patrol boat The boat was leaving the Korabelno bay. It was reported as WBIED
+Suspicious IED - First Responders action - no explosive In the Rada (City Council) in Khrestchatyk Street
+A fridge train was affected by the detonation of a device 2 devices detonated in both sides of railway (total 10 Kg TNT equivalent)
+Suspect arrested trying to use an IED against a railway bridge TM-62 mine main charge + cellphone switch. Kupyansk-Svyatogorsk way.
+IED was found. Mortar grenade with plastic explosive as main charge. Search after an attack with 2 MON-50 mines against a civilian car
+Suspect arrested trying to use an IED against a military  fuel depot TM-62 mine + SPM charge, cellphone as switch, electric detonator
+Call reporting IED - First Responders action - no explosive Against "Derzhprom" & "Universytet " metro station in Svobody Square
+Suspicious IED - First Responders action - no explosive Lenins Avenue
+A device was command detonated in a residential area
+Three elements of a criminal group were arrested, explosives seized 8 Kg of TNT/plastic explosive and 240 electric detonators.
+Two civilians died after an IED detonation
+A fiherman died after the detonation of a device in the seaport Officials related the device with the one against a patrol boat (07 Jun 2015)
+Suspicious IED - First Responders action - no explosive Schevchenko Boulevard
+A device was discovered by Security Forces 120 mm mortar projectile as a main charge, attached to a RC switch
+Call reporting IED - First Responders action - no explosive Against a trolleybus
+IED attack against a ROSHEN store Minskaya Street in Obolon district
+An IED was detonated in a residential area Dniprovskyi district
+Soldiers were affected by the detonation of an improvised device
+Two detainees when trying to lay an IED Bridge over Vovcha river
+One person was killed due to the detonation of a device
+Suspicious IED - First Responders action - no explosive Inside a car parked in front of Regional State Administration
+An IED was used in an ambush against a separatist leader Alexey Mozgovoy, GHOST BN Commander. In highway Lugansk-Alchevsk
+Call reporting IED - First Responders action - no explosive Against a night club in Ilyicha Street
+¾Two men were detained with explosives and weapons One block of TNT along with plastic explosive and an electric detonator
+Call reporting IED - First Responders action - no explosive Against the National Palace of Arts
+Explosives were found during the detention of a suspect 5 Kg of TNT, detonating cord & detonators
+A man was detained accused of selling explosives 17,5 Kg of TNT were seized
+A device was detonated against railroad Between Sentanovka and Shipilovo train stations
+An IED was blown up against a politicianês house MP Andrey Ilyenko, Svodoba party. Against a window of the house
+An woman was injured by the detonation of an emplaced IED
+Call reporting IED - First Responders action - no explosive Metro station "Akademika Barabashova"
+Call reporting IED - First Responders action - no explosive Peresado?nyh metro station
+Explosives and weapons were found Close to a thermal power station
+A device was blown up in front of Odessa College of Railway Transport Inside communications box Alekseevskaya Square. 400 gr TNT equivalent
+A man died after an IED was blown up inside his car Under the driver‚s seat
+Railroad was affected by the detonation of a device In a suburb of the city. 3 Kg TNT equivalent
+Almost 8 Kg of explosive seized during a detention
+A railway bridge was affected by the detonation of a device Maloskova Street
+An IED was found in a pipeline platform Solontsevaty Lane
+A man died after the detonation of a device Artyom Street
+Call reporting IED - First Responders action - no explosive Kiev international airport (Zhulyany)
+Call reporting IED - First Responders action - no explosive In Kulikovo Field (Pole Square), against a Trade Unionsê House
+A civilian was detained while trying to blow a fuel tank up
+Explosives seized during a car check 19 blocks of TNT (7.6 Kg)
+Explosives were found during a vehicle control 400 gr of explosive
+Call reporting IED - First Responders action - no explosive Against the Kiev District Court
+A device composed by two ATGM and a hand grenade was found
+Some IEDs were found during a search with Explosive Detection Dogs In Lysa Hora memorial complex, before a ceremony to start
+Call reporting IED - First Responders action - no explosive Against a military dormitory. One drunk sergeant was detained as suspect
+Explosives were found in a van during a road control Suspect was detained with some weapons, a 400 gr TNT block and a fuze
+Call reporting IED - First Responders action - no explosive Against a nuclear plant power station
+A guy was detained while trying to blow a fortification up 1.2 Kg of TNT plus detonators were seized
+Call reporting IED - First Responders action - no explosive Against Shirokolanovsky gas-supplying station
+Call reporting IED - First Responders action - no explosive "Vokzalnaya" metro station
+3 guys were detained and some explosives and fuzes were seized Suspects of 7 IED attacks
+Explosives were found inside a cache 18 Kg of plastic explosive, fuzes, rockets, grenades and  weapons found
+IED was blown up against the roof of a restaurant
+IED attack against railway Km 1168, 170 m of railroad were damaged
+Call reporting IED - First Responders action - no explosive Against several bridges in Kharkiv and Poltova. Suspect was detained
+Explosives seized during a search operation 3 Kg of plastic explosive and TNT were seized along with another weapons
+IED attack against railroad During the movement from "Kseniyevo" station to "Akardzha" station
+Call reporting IED - First Responders action - no explosive Against "Levada" train station
+Call reporting IED - First Responders action - no explosive Against åKing Cross Leopolis" shopping  center
+A car was searched and some explosive s were seized Two improvised hand grenades along with another weapons and ammo
+Call reporting IED - First Responders action - no explosive Against a school
+Call reporting IED - First Responders action - no explosive "Pochtovaya Ploshchad" and "Kontraktovaya Ploshchad" stations
+Call reporting IED - First Responders action - no explosive Culture Centre of Kharkiv electromechanical plan
+IED against 2 shunting locomotives During a movement from "Sentyanivka" station to"Shipylove" station
+Call reporting IED - First Responders action - no explosive Against "Plant" Club
+A women was detained when transporting explosives 4 TNT blocks and some detonators
+IED detonation against a food store
+A flat was blown up Arkhangelkaya Street
+IED detonation against locomotive freight trains in railway Volnovakha station
+Explosives were seized during a detention & search of a house Suspets of the attacks against Admiralskaya Center in DEC 14 and MAR 15
+A car was blown up The owner was an officer of the Ukrainian Security Service
+Call reporting IED - First Responders action - no explosive Against a shopping center
+Call reporting IED - First Responders action - no explosive Against Cultural Center of Power Engineers
+Call reporting IED - First Responders action - no explosive Prosvity office in Rymarskaya Street & parking in Danilevskoge Street
+Explosives seized after a detention 3 suspects of attacks against railways were arrested
+Call reporting IED - First Responders action - no explosive "Darnitsa" metro station
+A car was blown up due to an IED
+Explosives found under bridge to Severodonetsk 49,6 Kg of TNT, 24 Kg of ammonite, electric detonators
+Call reporting IED - First Responders action - no explosive Metro stations "Arsenalyana" & "Nezalezhnosty"
+Call reporting IED - First Responders action - no explosive Metro station "Khreschatik"
+Suspects detained while preparing IED attacks against railway Some explosives were seized
+Call reporting IED - First Responders action - no explosive Metro station "Ploshcha LVA Tolstogo"
+Suspicious IED found, after investigation there was no explosive In Boulevard Sidorov. F-1 inert training hand grenade used as main charge.
+Call reporting IED - First Responders action - no explosive "Teatralnaya" metro station
+Call reporting IED - First Responders action - no explosive "Vokzalnaya" train Station
+Call reporting IED - First Responders action - no explosive Metro station "Akademika Barabashova"
+Call reporting IED - First Responders action - no explosive Peresado?nyh metro station
+Explosives and weapons were found Close to a thermal power station
+One car was blown up causing fire damages over 2 cars more In Zalivnaya Street. One of the cars was owned by editor of TopGorod.com
+Call reporting IED - First Responders action - no explosive One  shopping centres in Obolonsky district & metro station –Arsenalnaya”
+Call reporting IED - First Responders action - no explosive Vesty radio station editorial office
+IED was blown up against railway Railroad between Yuzhno Donbasskaya and Yelenovka
+Call reporting IED - First Responders action - no explosive Offices of gas companies (JSC Ukrtransgaz & Naftogaz)
+Explosives seized after the detention of 40 suspects
+Call reporting IED - First Responders action - no explosive Underground station in Lev Tolstoy square
+Suspicious package inside a vehicle - no explosive found VW Passat parked in Rymarska Street
+A car was blown up Kurchatova Street, another car was burn due as a result of  the explosion
+Some explosive were found by SBU during a search TNT blocks, fuzes, hand grenades and rocket launchers
+A car was blown up due to an explosion in its trunk Car owned by a guard of the Border Service
+IED components, instructions, precursors & explosives were seized After several detentions and searches against a group
+IED components and explosives seized during detention & search Suspect of IED attacks in Kharkiv
+IED attack against a pole with the national flag in Pravdy Avenue The pole has been removed due to damages
+A railway was blown up Railroad between Zhikhor and Zmiev
+Call reporting IED - First Responders action - no explosive Targeting three underground stations and two schools
+Call reporting IED - First Responders action - no explosive Against station South
+IED was detonated against railway Km 55 of railroad Shchotove - Shterivka
+A man was detained when carrying explosives and ammo in a bag 5 plastic explosive packages were found plus hand grenades and fuzes
+A •Privatbankê ATM was blown up and robbed
+A car was blown up by a device Three vehicles more were affected by the fire caused by the detonation
+Two IEDs were found & disosed in an office of •Sberbank of Russiaê  Pobeda Avenue & Lesya Ukrainka Broadway
+An IED detonated against offices of •Sberbank of Russiaê  Borshchagovskaya Street
+3 suspects of IED attacks were detained: IED components found Precursors, HME, 600 gr TNT, timers, detonators, electronics & components
+An IED was found under a road viaduct during a search Road between Novomoskovsk and Dnipropetrovsk. About 2.5 kg HME/TNT
+Police found and disposed an IED laid at railway 400 gr TNT with fuse between Samarovka and Novomoskovsk
+An IED was detonated under a train at Osnova station
+An IED was detonated against a railway fuel tank
+IED attack against a volunteers centre Staportofrankivska Street with Olhivska Street
+An IED was blown up against a train transporting coal Railroad on the border of Pokrovsky and Mezhevsky Region
+IED attack near a building of the regional state administration  Planners/executors were detained on April 6th 2015
+An IED placed under a military truck truck detonated An Air Defense mobile radar station was damaged
+SBU discovered an IED during a detention & search operation Some weapons were discovered along with the device
+Railroad infrastructure was damaged by the explosion of a device Railway between  Demarino and Prosyana
+IED was detonated against  a residential house  In Geranevaya Street
+IED attack against Padaigma 12 office, that supports injured soldiers This attack could be connected with another one happened on Jan 5th
+A device was blown up against railroad
+Electricians were killed by the detonation of a device while repairing Although reported as "a mine" it looks like an IED (see previous event)
+Electricians were killed by the detonation of a device while repairing Although reported as "a mine" it looks like an IED (see next event)
+A road bridge was blown up Road connecting the city with Luhansk. Partially destroyed on Jan 21st
+4 IEDs  using mobile phones as switches were discovered The target were different points of the railroad
+A train carrying coal was derailed due to the detonation of a device ¾Close to Check Point #29, UKR forces look behind the explosion
+A railway bridge was blown up
+IED was blown up against railway
+3.5 Kg of TNT were found during the search of a house
+Call reporting IED - First Responders action - no explosive Lviv airport
+Explosive and detonators were found in a cache 6 Kg of  TNT and some detonators
+During a control in a check point, explosive was found
+IED (3Kg TNT equivalent) found during detention of 2 suspects Accused of the attack to Admiralteisky business centre on March 12th
+Police discovered explosives ready to be used against a dam 4,8 Kg TNT & detonators
+Plastic explosive was found during the search of a taxi
+An IED was found and disposed by emergency services (SSU) IED using a fire extinguisher as container, mil explosive & safety switch
+Explosives seized during taxi search in a check-point A women was wearing a 5 litre bottle with plastic explosive + RC device
+A car bomb was blown up
+IED detonated against an office of Samopomich party It happened in Admiralteisky bussines center
+A railway bridge used for carrying coal was blown up Km. 51 Rodakovo-Krasny L, between Sentanovka & Shipilovo station
+An IED blew up against railroad Lisichansk-Kharkov railway
+A suitcase containing an IED was found by a civilian
+A railway bridge was blown up
+Explosives seized during car search in a check-point 2 Kg plastic expl + 1,2 Kq TNT. Road between Zaporizhia & Mariupol
+Several roadside IEDs against a Brigade Commanders convoy Chief of Prizrak Brigade. Attack claimed by Tini Partisan Detachment
+A minibus blew up Poznanskaya Street
+A car was blown up near a government building Kharkiv State Administration for Culture in Gvardeytsev Shironintsev Street
+A courier was detained when transporting an IED in a car 3 Kg of plastic explosive. Planned target was located in Kherson.
+A package containing an IED was found & disposed by Police EOD About 1 Kg TNT in front of a shopping center
+A device against the car of a Volunteer Battalion Commander Against Andrey Yangolenko. Another magnetically-attached IED failed
+A device was blown up near a Right Sector office Koblevskaya Street
+Two volunteer Battalion servicemen detained carrying explosives Driving a car:16,8 Kg pf TNT + 36 detonators along with weaponry
+A bag with explosive devices was found in the car of 2 suspects One was killed, other escaped. 3 Policemen injured. (Cutting charges)
+An IED detonated in the 4th floor of a building
+An IED (200 gr TNT equivalent in plastic bag) was found and disposed In front of a cafeteria in Zhukovskoho Street
+An IED was blown up against a pro-Maidan march near Sports Palace Marshal Zhukova Street (about 200 gr TNT plus steel bearings)
+Two IEDs were detonated against an office of an Euromaidan leader Yevgeny Rezvushkins office in Bolshaya Arnautskaya Street
+An IED was detonated against a power substation The station provided power to railways
+A device was blown up 100 m away from DPR leader residence Against Aleksandr Zaharchenko before a press conference
+An IED was seized during the detention of a  suspect of an IED attack  It was a honey can filled with explosive. The previous attack was on Jan 16th
+During search operation, some IEDs and homemade explosive found 15 IEDs, and a 50 l barrel filled with homemade explosive
+Call reporting IED - First Responders action - no explosive Railway station in Ruslan Bashirli Street
+An IED was laid and detonated at the door of a hostel "More Hostel Odessa", sited at 3rd floor of the building in Koroblevska Street
+A Battalion Commander died as a result of a roadside IED attack Lviv regional police commander Dmytro Zaharia
+A device was detonated against the office of a notary company Minor damages. Otakar Yarosh Street
+A man was detained when transporting an IED
+A man was detained when laying an IED against rairoad tracks 400 gr TNT were seized during the search of his house
+A man was detained while trying to sell explosives 2 Kg of TNT
+Plastic explosive was found during search in a suspects house 30 gr of hexogen-based explosive. Detained related to 31Dec14 event
+An explosive device was discovered near the rail tracks 7 blocks of TNT (2.8 Kg), detonator, and RC switch were found
+An IED detonated under a gas pipe near a Priviatbank office Marshala Zhukova Street. Severe damages in the building.
+An IED was discovered and disposed near a Priviatbank office Dnepropetrovska Doroga Street. Metal can, battery & circuit board
+Some IEDs and weapons were seized
+A homemade grenade was thrown against a man
+An IED laid by 2 man near a vehicle detonated in a car park The device was hidden inside an old car tyre
+Suspected IED - First Responders action - no explosive 3 schools near Karachuny railway station. Suspect was detained
+An IED was discovered in the archive room of an official building Mayors office inside Kiev State City Administration
+A device was blown up Near Kharkiv-Balashovsky railway station
+An IED was found along with 600 gr of TNT under a walking bridge
+A railway bridge was blown up A train transporting military equipment was derailed
+A road bridge was blown up Putilovsky bridge, in the way to Volnovakha
+A device was detonated against the district court After a trial on a case against a Svodoba party member
+Homemade grenade was thrown by a man against police patrol Prazhskaya Street. Man called Police station asking for help
+A device was detonated in Arkhitektora Nikolayeva Street The nearest building first floor and about 10 cars were affected by
+Some explosives were seized in a check point 2 Kg TNT and some fuses
+A device was detonated against a volunteer centre and a bank office Troitskaya Street with Nechypurenka Street
+A device was detonated against a check-point IED was allocated inside a jar of honey given as a present
+Detonation of a device Arkhitektora Nikolayeva Street.
+Detonation of a device close to a Diamantbank office Troitskaya Street
+A road bridge over railway was damaged by a controlled detonation
+A device was detonated at the pass of a military vehicle
+SBU seized some weaponry along with an IED and several detonators
+One device explode & two more were disposed in New Post office Two-litre bottle with unknown substance, wires and a timer
+A device was detonated against a volunteer centre Gimnazicheskaya Street with Bolshaya Arnautskaya Street
+A device was detonated against Euro-Maydan coordination office
+Call reporting IED - First Responders action - no explosive River port
+A device was detonated in a tank car inside a railway station Peresyp station
+A drunk man was injured due to a device he was carrying Inside a store
+An IED was detonated in front of a flat door Azure Street. A suspect was detained.
+Suspected IED - First Responders action - no explosive Simferopol airport
+IED components, explosive precursors and manuals were seized In the flat of a man accused of throwing grenades
+A device detonated during an antiterrorism operation Near the city park, hidden inside a garbage bin
+A device was detonated in the yard affecting 2 vehicles Central Department of the Ministry of Revenue and Duties
+A device was detonated near a gas station Troeshchina district
+A man died due to the detonation of a device he was carrying Sedegskaya Street
+A man blown himself and a second IED was disposed Inside currency exchange offices after asking for money
+Some explosive fuzes were found near a water pump station Some other munition was found too during the search
+Call reporting IED - First Responders action - no explosive Inside electrical train Odessa-Balta
+A military vehicle was affected by a roadside device
+A device was detonated Close to a store Azhur in Rymarskaya Street
+Call reporting IED - First Responders action - no explosive Malinovsky District Court
+Some (24) IEDs, explosive & detonators found after detention Three detainees
+Detonation of a device inside a hostel Sapernoye Pole Street.
+A device detonated in railway after the pass of a freight train Zastava-1 station
+A railway bridge across the river Kalchik was blown up Km 1260
+A device was detonated against a check -point
+A bag with device was laid under a car and caused a detonation Zhukovskogo Street, near office of the Council for Public Safety
+Some quantities of TNT were seized inside a vehicle More ammunition was found inside the garage
+A car was destroyed by the detonation of a device It is not clear if the device was emplaced or transported in a car
+Detention of a woman wearing a bag with RCIED (3 Kg TNT equivalent) Device included an anti-tamper switch and fragmentation
+A homemade grenade thrown against Apostolovo City Council
+An 2 Kg TNT equivalent IED contained inside a bag blown up A woman was seen laying the bag
+Call reporting IED - First Responders action - no explosive Canadian embassy
+A device was detonated against a volunteer centre in Admiralsky St 1 Kg TNT equivalent against "Dalias Hundred Severin" facilities
+IED detonated against a memorial to Ukrainian insurgent Army
+A ralway bridge was damaged by a detonation Krasnoarmiysk-Hrodivka, 6 beam spans & network were damaged
+Call reporting IED - First Responders action - no explosive Zmievskaya heating power station
+Call reporting IED - First Responders action - no explosive Central railway station
+A device was detonated against a patriotic souvenir shop "Patriot" shop
+A device was detonated close to the gate of a military base Proskura Street
+Call reporting IED - First Responders action - no explosive South Region military prosecutorês office,  Pirogovskaya Street
+Call reporting IED - First Responders action - no explosive Kyivgorstroy building, 2 supermarkets, one shopping centre
+Call reporting IED - First Responders action - no explosive School, "Klovskaya" metro station, Post office, CAN Embassy
+Call reporting IED - First Responders action - no explosive Yuzny railway station, ATB supermarket
+Call reporting IED - First Responders action - no explosive State Regional Administration building
+Device detonated beside a military facility Outer fence was damaged in Victory Street
+Call reporting IED - First Responders action - no explosive City Council
+Device detonated in a railway station Osnova railway station
+Call reporting IED - First Responders action - no explosive City Council
+Device detonated near Military Hospital Beside an electric substation transformer in Trinkler Street
+Call reporting IED - First Responders action - no explosive Central Office Ukrainian Service
+Call reporting IED - First Responders action - no explosive UZD railway station, Regional Energy Corporation building
+Call reporting IED - First Responders action - no explosive Ave Plaza shopping mall
+Call reporting IED - First Responders action - no explosive Darnitsa metro station, Teatralnaya metro station
+Call reporting IED - First Responders action - no explosive Ukrainian-Polish Bussines Center
+Call reporting IED - First Responders action - no explosive Krasnoarmeyskaya railway station
+Call reporting IED - First Responders action - no explosive Zolotye Vorota metro station
+Call reporting IED - First Responders action - no explosive Darnitsa metro station, railway ticketing, entertainment center
+Call reporting IED - First Responders action - no explosive Rovno railway station, Ivano-Frankovsk railway station
+Call reporting IED - First Responders action - no explosive Zavod Imeny Malysheva metro station
+Call reporting IED - First Responders action - no explosive Central Elections Commission, McDonalds & residential area
+Call reporting IED - First Responders action - no explosive One man was detained after his call reporting several IEDs
+Call reporting IED - First Responders action - no explosive Central train station
+Detonation damaged a cargo truck in a railway station Eskhar station, in the way from Osnova station to Kupiansk
+Attack against a pub A package was laid inside "Stina" pub before detonating
+Call reporting IED - First Responders action - no explosive "Maidan Nezalezhnosty" and "Kreshchatik" metro stations
+Call reporting IED - First Responders action - no explosive State Fiscal Service Central Department
+Call reporting IED - First Responders action - no explosive Teatralnaya station & 2 Regional Administration buildings
+A car detonated during check in a road control Explosion when driver was opening the trunk (RCIED reported)
+Call reporting IED - First Responders action - no explosive Regional administration building
+IED seized during a search in the house of a suspect
+IEDs seized during the detention of 11 suspects of terrorism
+Call reporting IED - First Responders action - no explosive Administration building & supermarket
+Explosives seized during a train wagon search A man was detained
+IED seized in a detention
+Call reporting IED - First Responders action - no explosive Central train station
+Detonation against railroad Basis - Poltava railway
+Homemade grenade against a member of People‚s Front Party
+IED detonation damaged a military transport vehicle
+IED detonation affecting a platoon Reported as "Daisy Chain"
+Call reporting IED - First Responders action - no explosive Metro station –Malyshev Factory”, (2014‚s 12th false IED report)
+Call reporting IED - First Responders action - no explosive Metro stations –Vokzalnaya” & "Universitet"
+Railway was damaged by a detonation Sentyanivka station from Luhansk to Kiev
+Railway was damaged by a detonation Odessa-Peresip station
+IED detonations in 2 buildings Lawyer office & PrivatBank office in supermarket Brusnichka
+Call reporting IED - First Responders action - no explosive Metro Stations –Universitet” and –Syretz”
+Call reporting IED - First Responders action - no explosive Regional State Administration building
+Call reporting IED - First Responders action - no explosive Regional State Administration building
+Call reporting IED - First Responders action - no explosive Metro station –Universitet” & Central Post Office
+15 Kg TNT seized in a road control
+Call reporting IED - First Responders action - no explosive Ukrinform News, Ukrayina hotel & Khreshchatyk street
+Call reporting IED - First Responders action - no explosive Lviv airport
+Call reporting IED - First Responders action - no explosive Military enlistement office & Police station.
+Call reporting IED - First Responders action - no explosive –Channel 5”, Central Election Commission& State Administration
+A man was detained while transporting explosives in a car There is a group behind. Explosives (TNT) & detonators found
+Call reporting IED - First Responders action - no explosive National Guard facility, Stryiskyi Park & Lviv Railway Station
+Call reporting IED - First Responders action - no explosive Regional State Administration
+Calls reporting IED - First Responders action - no explosive Central metro station
+Explosives, precursors and detonators seized during detention A group was detained
+3 detainees when trying to blow a railway bridge up Plastic explosive & detonators were seized
+Road bridge was blown up Pavlopolsky bridge
+Calls reporting IED - First Responders action - no explosive Metro station –Lev Tolstoy Square” & –Channel 5” building
+Calls reporting IED - First Responders action - no explosive Metro station –Lev Tolstoy Square”, Central Election Commission
+Calls reporting IED - First Responders action - no explosive TsVK building
+Calls reporting IED - First Responders action - no explosive metro stations Darnitsya and Nivki
+Device was found attached to a billboard TIME DELAY switch?
+IED attack against railways, damaging steel power supports Osnova station: 2 IEDs detonated & 2 other were disposed
+Detonation inside a jewelry
+Calls reporting IED - First Responders action - no explosive Custom posts "Yagodin" & "Ustiluk"
+Calls reporting IED - First Responders action - no explosive Metro stations –Vokzalnaya”
+IED attack against railways, damaging steel power supports
+Call reporting IED - First Responders action - no explosive Levoberezhnaya metro station
+Call reporting IED - First Responders action - no explosive Metro station –Vokzalnaya”
+Call reporting IED - First Responders action - no explosive Odessa University
+Call reporting IED - First Responders action - no explosive "Yalta Intourist" hotel, before a conference
+Railway was damaged by a detonation
+Call reporting IED - First Responders action - no explosive Teatralna metro station
+IED detonation against Police station
+IED attack against railroad
+Explosive device seized during house registry Detainee was planning an attack against a Lutheran church
+IEDs seized in an apartment search. 5 guys were detained. They prepared attacks against railway.
+Explosives were seized. 6 guy group arrested. Suspects of explosion (August 3) in Kharkiv Tank Repair Plant
+IED attack against a bank office Kolomoisky PrivatBank office
+Call reporting IED - First Responders action - no explosive Metro stations –Vokzalna”, "Poshtova Ploshcha"
+A civilian transporting an IED was detained near military base 200 gr TNT block, safety fuze and detonator
+Civilian car loading explosives and weapons was seized 29 Kg of TNT
+Call reporting IED - First Responders action - no explosive Metro station –Arsenalnaya”
+Call reporting IED - First Responders action - no explosive Channel –112 Ukraine” building
+Device was detonated against a Russian bank office
+An RCIED was found along with landmines and missiles Discovered by border guards
+Homemade grenade was thrown against people Ukrainian House director was the aimed target
+Call reporting IED - First Responders action - no explosive Metro station Petrovka
+Homemade grenades were seized
+Detonation against a railway bridge across the river. Pedestrian part partially damaged. One attacker was dead.
+Pedestrian bridge was blown up Bridge between both districts of the village
+Calls reporting IED - First Responders action - no explosive Two railway stations
+Explosive device detonated against a DNR militia patrol
+Sabotage in a Tank Repair Plant IED was reported
+A van loaded with explosives was stopped in a check-point Reported as an attempt of "suicide attack" by UKR military
+Explosive device was blown up inside a bus
+Partial detonation of an IED slightly damaged a bridge Failed attempt of blowing bridge up over Seversky Donets River
+Calls reporting IED - First Responders action - no explosive Central train station, 7 hotels, 1 restaurant and 1 hostel
+A device blew up killing 1 woman & injuring 8 children
+Calls reporting IED - First Responders action - no explosive 6 alarms in Golosievskyi, Podolsky and Pechersky districts
+Bridge was blown up Bridge near the Cotton Factory between Kalinin and Nikitovsky
+6 IEDs discovered in schools
+2 bridges & 2 railways points were blown up
+Gas tanks were blown up Gas station –Parallel”
+Bridge was blown up Bridge between main city & Perevalska
+Detonation against a hospital Tyumen cardiology center. 2 detainees
+A minibus was blown up against a check-point Incident is reported as "suicide attack" by Ukrainian officials
+Bridge over Borova river was damaged by demolition Road T-13-03 between Rubizhne & Severodonetsk
+Calls reporting IED - First Responders action - no explosive Saltov market, Central hospital & emergency services
+Railway damaged by explosions Track Novobahmutovka - Gorlovka
+Calls reporting IED - First Responders action - no explosive Hotels "Khreschatyk ", "Bratislava" & "Express" plus a hospital
+IED attacks in Pryvatbank office (Krasnoslabodskaya Street)
+IED attacks in Pryvatbank office (Sergey Yadov Street)
+Bridge was blown up by separatist defending it Tractor was missidentified as a tank advancing during night
+Several IEDs laid in buildings were disposed by EOD
+Bridge over the Idar River was blown up Road P-07 Chuguev-Melovoe (via Starobelsk)
+Road bridge was blown up Road T-05-13 Bridge close to Mokraya Plotva River
+Road bridge over railway was blown up Road T-05-16 between Horlivka and Dzerzhinsk
+Bridge damaged by explosion
+Railroad bridge was blown up
+Call reporting IED - First Responders action - no explosive Public Tax Administration building
+Explosives (TNT) and detonators seized in a van with 5 guys. About 100 Kg. explosive material (TNT blocks, mines, charges)
+Call reporting IED - First Responders action - no explosive Psychoneurological Clinic building in Shtabnoy Lane
+Zujevske reservoir dam & two bridges affected by demolitions Bridges over Krynka river
+Railroad bridge was blown up Near Horodnia station over Tepla river
+Railway and electricity contact poles damaged by explosions At least 4 detonations in a 5 meter radius. Looks TNT effect.
+Detonation against overpass damaged left mid-span support Road T-05-09 Bolshaya Novoselka-Amvrosievka (Km 80.5)
+Railroad bridge over H-20 road was partially blown up
+Bridge over Seversky Donets river was blown up Road T-05-13 from Artemovsk to Gorlovka, Km. 12,488
+Bridge over Kazenyi Torets river was damaged by detonation Highway M-03 (Kiev-Kharkov-Dolzhansky), Km. 675,378
+Motorway bridge was blown up Motorway from Amvrosiivka
+Homemade grenades, landmines & explosives seized
+Suspicious VBIED was destroyed through controlled detonation Main Battle Tank was used due to the lack of EOD means
+Bridge over Bila river was damaged by an explosion
+Call reporting IED - First Responders action - no explosive Administrative Court building & "Channel 5" facilities
+5 Kg TNT-equivalent IED against Military Enlistment office  Crater 4 m. diameter, 3 m. depth. Several damages to floors.
+Explosion close to Suvorovsky military commissariat office
+Bridge over Siversky Donets was blown up
+Bridge over Seversky Donets river destroyed by an explosion. Road T-03-15, conecting Luhansk-Lisichansk
+Call reporting IED - First Responders action - no explosive Economic Court building
+Roadside bomb detonation A family was affected by the explosion when driving their car
+IED was detonated against Militia Staff building
+Bridge across the Koznyi-Toretz River was blown up Highway Kharkov-Rostov
+Call reporting IED - First Responders action - no explosive Fountatin in Zabolotny Steree
+Four explosions in 2 different points of railroad
+IEDs against cables supporting a TV tower  Tower was destroyed in Karachun mountain
+Explosives (1.5 Kg TNT) & detonators seized. 5 guy group arrested. 2-guys detention when trying to attack railway. 3 more later.
+Railroad bridge was damaged by an explosion
+Railway was damaged by a detonation Train ADLER-KIEV was affected
+Railway bridge was damaged by 2 explosions Near Horodna station
+Man detained wearing 2 IEDs He was preparing an attack to Kulbakino airfield
+Railroad bridge damaged by explosion Zheleznodorozhny Bridge. 20Kg TNT-equivalent IED
+Railroad bridge over Dnieper river damaged by explosion
+2 detonations on railroad Kondarshevskaya strecht & Krasnozerovka Ogorodny strecht
+96 Kg of Ammonite & electric detonators stolen from a mine Ammonite = 20% TNT/80% Ammonium Nitrate
+Several detonations against a water pump station Most probably accurate mortar firing, according to effects!!!
+Railroad damaged by explosion Ilovajick-Martsevo railroad
+14 cargo vans derailed. Ilovaish-Mospino stretch, in the way to Kuteinikovo.
+2 detainees transporting explosives in a truck 22 TNT blocks, detonators & explosives connection schemes
+Bridge damaged by an explosion Km. 58, road T0517 Yenakiyevo-Shakhtersk-Amvrosiivka
+IED found during detention of a suspect 2nd detainee from a group planning attacks against airfield
+IED detonation near an exchange office Explosion after a call reporting a potential underbelly VOIED
+IED explosion under concrete basis of gas pipeline Urengey-Pomary-Uzghorod pipeline
+2 detainees transporting an IED near Russian Consulate Destruction radius of the bomb was estimated at 15 meters
+Pedestrian bridge over road to Luhansk was destroyed
+IED partially laid close to Presidential HQ 5 hand grenades + electr fuzes, guy escaped before activating
+Explosion of a car parked beside DNR leader vehicle Near an administration building. Followed by shooting.
+Bridge was blown up Highway km 3,773
+720 Kg Ammonite & 360 electric detonators stolen from mine Ammonite = 20% TNT/80% Ammonium Nitrate
+Explosion of a car near UKR parliament Car driver was injured. Possible Underbelly IED/limpet mine
+IED was disposed close to Raisins - Slavic road RC device + TNT + artillery shell (UXO)
+Railway was affected by an explosion
+Railroad damaged by explosion Near Donetsk, between Krasnohorlivka and Kurakhovo
+Some guys were detained in possesion of explosives TNT, Ammonite, and grammonite, along with homemade hand grenades
+Railroad affected by explosion Km. 57
+Railroad bridge destroyed by explosion
+2 Kg of plastic explosive and detonators were seized Found during registry & detention of a criminal group
+3 explosions in HP gas pipeline Urengoy_Pomary_Uzhgorod Remnants of a RCIED were found at scene
+Pipe bomb detonated against a Pryvatbank office
+Small detonation in a rucksack borne by a man Inside Arsenalna metro station. Suspect was detained
+IED seized during detention Detention of a suspect during registry of his home
+Homemade hand grenades were thrown during clashes Reported by Police officials
+During a regular patrolling in an UKR Base perimetral defenses 04:00L
+Homemade hand grenades were seized 13 activist detained - explosive & incendiary devices
+4 consecutive detonations inside an airfield Helicopter & surveillance airplane destroyed by attackers
+Attack over pro-UKR check-point from a car passing around It is not totally confirmed as improvised device yet
+Call reporting IED - First Responders action - no explosive Kharkov Palace hotel
+IEDs were laid in an occupied government building Building was occupied, IEDs used as defensive weapon
+Explosive device laid close to UKR ship in Donuzlav lake Trawler –Cherkassy” suffered damages in main wheel
+Two homemade hand grenades were thrown against  Deputys office
+400 Kg TNT transported in a truck were confiscated Two suspects detained in a road control at Crimean border
+Explosion close to Regional Administration building External damages to building
+Explosion in Trade Union House Bomb package was given to the victim as a present    </textarea>
+    <button id="go" type="submit">Go!</button>
+  </div>
+</div>
+
+<hr>
+
+<div style="float: right; text-align: right">
+  <p><label for="max">Number of words:</label> <input type="number" value="250" min="1" id="max">
+  <p><label for="per-line"><input type="checkbox" id="per-line"> One word per line</label>
+  <!--<p><label for="colours">Colours:</label> <a href="#" id="random-palette">get random palette</a>-->
+  <p><label>Download:</label>
+    <button id="download-svg">SVG</button><!-- |
+    <a id="download-png" href="#">PNG</a>-->
+</div>
+
+<div style="float: left">
+  <p><label>Spiral:</label>
+    <label for="archimedean"><input type="radio" name="spiral" id="archimedean" value="archimedean" checked="checked"> Archimedean</label>
+    <label for="rectangular"><input type="radio" name="spiral" id="rectangular" value="rectangular"> Rectangular</label>
+  <p><label for="scale">Scale:</label>
+    <label for="scale-log"><input type="radio" name="scale" id="scale-log" value="log" checked="checked"> log n</label>
+    <label for="scale-sqrt"><input type="radio" name="scale" id="scale-sqrt" value="sqrt"> √n</label>
+    <label for="scale-linear"><input type="radio" name="scale" id="scale-linear" value="linear"> n</label>
+  <p><label for="font">Font:</label> <input type="text" id="font" value="Impact">
+</div>
+
+<div id="angles">
+  <p><input type="number" id="angle-count" value="5" min="1"> <label for="angle-count">orientations</label>
+    <label for="angle-from">from</label> <input type="number" id="angle-from" value="-60" min="-90" max="90"> °
+    <label for="angle-to">to</label> <input type="number" id="angle-to" value="60" min="-90" max="90"> °
+</div>
+
+
+</form>
+
+<script src="d3.min.js"></script>
+<script src="d3.layout.cloud.js"></script>
+<script src="cloud.js"></script>
+

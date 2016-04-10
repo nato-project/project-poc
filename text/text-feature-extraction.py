@@ -7,7 +7,7 @@ import json;
 
 
 # Load the IED data from csv
-df = pd.read_csv('ied.csv',encoding='ISO-8859-1');
+df = pd.read_csv('ied2.csv',encoding='ISO-8859-1');
 print(df.columns.values);
 corpus = list(df["TEXT"]);
 ids = list(df["ID"]);
@@ -84,7 +84,7 @@ for r in range(0, tfidf_matrix.shape[0]):
     #    node_word = bow_features[argmax];
 
     # Get top 3 words from a document
-    top_words = tfidf_array[r].argsort()[-3:][::-1];
+    #top_words = tfidf_array[r].argsort()[-3:][::-1];
 
     #nodes.append({"name":str(corpus[r]),"id":str(ids[r]),"type":str(types[r]),"word":node_word});
 
@@ -141,10 +141,11 @@ for index, row in df_cluster_nodes.iterrows():
     nodes.append({"name":row['name'],"id":row['node'],"type":row['type'],"word":"","group":row['group']});
 
 for index, row in df_links.iterrows():
-    links.append({"source":node_array.index(row["source"]),"target":node_array.index(row["target"]),"value":row['value'],"source_type":row['source_type']});
+    print(row["source"],row["target"],row['value']);
+    links.append({"source":node_array.index(row["source"]),"target":node_array.index(row["target"]),"value":1,"source_type":row['source_type']});
 
 
-print("Cluster Nodes: ",df_cluster_nodes);
+#print("Cluster Nodes: ",df_cluster_nodes);
 print("Groups: ",grouplist);
 
 print("Links Count: ",total_links);

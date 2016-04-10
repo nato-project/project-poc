@@ -123,9 +123,9 @@
 
             // determine links
             for (k=0; k<data.links.length; ++k) {
-                var e = data.links[k],
-                        u = index(e.source),
-                        v = index(e.target);
+                var e = data.links[k];
+                var u = index(e.source);
+                var v = index(e.target);
                 if (u != v) {
                     gm[u].link_count++;
                     gm[v].link_count++;
@@ -182,8 +182,13 @@
 
             for (var i=0; i<data.links.length; ++i) {
                 o = data.links[i];
+                //console.log(o.source+"/"+o.target);
                 o.source = data.nodes[o.source];
                 o.target = data.nodes[o.target];
+                //console.log(o.source+"/"+o.target);
+                if(o.source.id == 476 || o.target.id == 476){
+                    console.log(o.source.id+"/"+o.target.id+"/"+ o.source.group+"/"+ o.target.group);
+                }
             }
 
 
