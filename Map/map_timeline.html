@@ -16,6 +16,14 @@
     <h1>IED Ukraine Map and Timeline</h1>
 
     <div id="timelineVis" class="row"></div>
+    <div id="mapColorCombo">
+        <label id="showLabel" for="regionColorSelect">Region color</label>
+        <select id="regionColorSelect" onchange="regionColorSelect()">
+            <option value="IEDevents">Nb IED Incidents</option>
+            <option value="KIA">Nb Persons Killed</option>
+            <option value="WIA">Nb Persons Wounded</option>
+        </select>
+    </div>
     <div id="mapVis" class="row"></div>
 
     <!-- Load JS libraries -->
