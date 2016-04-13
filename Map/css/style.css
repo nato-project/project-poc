@@ -16,3 +16,9 @@
 	fill: none;
 }
 
+.brush .extent {
+    stroke: lightgrey;
+    fill: grey;
+    fill-opacity: .1;
+    shape-rendering: crispEdges;
+}

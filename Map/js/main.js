@@ -3,24 +3,27 @@
 var mapData = [];
 var iedData = []
 
-// Date parser to convert strings to date objects
-var parseDate = d3.time.format("%Y%mmm%dd").parse;
-
 // Variables for the visualization instances
 var mapVis, timelineVis;
-
+var dsv = d3.dsv(";", "text/plain");
 
 // Start application by loading the data
 queue()
 	.defer(d3.json, "data/ukraine.json")
-	.defer(d3.csv, "data/map-ied-ukr-situation.csv")
+	.defer(dsv, "data/IED Map Data - All.csv")
 	.await(function(error, mapTopoJson, iedDataCsv) {
+
+		// Date parser to convert strings to date objects
+		var parseDate = d3.time.format("%d/%m/%Y").parse;
 
 		// Convert numeric values to 'numbers'
 		iedDataCsv.forEach(function(d) {
 			d.KIA = +d.KIA;
 			d.WIA = +d.WIA;
-			d.DATE = Date.parse(d.DATE);
+			d.ID = +d.ID;
+			d.LOCATION_LAT = parseFloat(d.LOCATION_LAT.replace(',','.'));
+			d.LOCATION_LNG = parseFloat(d.LOCATION_LNG.replace(',','.'));
+			d.DATE = parseDate(d.DATE);
 		});
 		iedData = iedDataCsv;
 
@@ -43,13 +46,10 @@ function createVis() {
 
 
 function brushed() {
-/*
+
 	// Set new domain if brush (user selection) is not empty
-	areachart.x.domain(
-			linechart.brush.empty() ? linechart.x.domain() : linechart.brush.extent()
-	);
-	
-	// Update focus chart (detailed information)
-	areachart.wrangleData();
-	*/
+	mapVis.filter = timelineVis.brush.empty() ? [] : timelineVis.brush.extent();
+
+	// Update map
+	mapVis.wrangleData();
 }

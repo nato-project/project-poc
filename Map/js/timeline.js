@@ -8,7 +8,6 @@
 Timeline = function(_parentElement, _data){
 	this.parentElement = _parentElement;
 	this.data = _data;
-	this.data = _data;
 
 	this.initVis();
 }
@@ -39,12 +38,12 @@ Timeline.prototype.initVis = function(){
 	  	.domain(d3.extent(vis.data, function(d) {return d.DATE;}));
 
 	vis.y = d3.scale.linear()
-			.range([vis.height, 0])
-			.domain([0, d3.max(vis.data, function(d) {return d.KIA + d.WIA;})]);
+		.range([vis.height, 0])
+		.domain([0, d3.max(vis.data, function(d) {return d.KIA + d.WIA;})]);
 
 	vis.xAxis = d3.svg.axis()
-		  .scale(vis.x)
-		  .orient("bottom");
+		.scale(vis.x)
+		.orient("bottom");
 
 	// Create svg elements
 	vis.svg.append("g")
@@ -56,9 +55,9 @@ Timeline.prototype.initVis = function(){
 		.attr("cy", function(d) {return vis.y(d.KIA + d.WIA);})
 		.attr("r", 5)
 		.attr("fill",function(d) {
-			if (d.KIA > 0) return "black";
-			if (d.WIA > 0) return "#888888";
-			return "lightgrey";
+			if (d.KIA > 0) return "red";
+			if (d.WIA > 0) return "orange";
+			return "grey";
 		});
 
 	// Initialize brush component
