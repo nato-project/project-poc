@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: #dfdfdf;
+  stroke-width: 0;
+}
+    .circle {
+      fill: #494949;
+      stroke-width: 0;
+    }
+
+</style>
+<body>
+<div id="time-scale"></div>
+
+<div id="box-vis"></div>
+
+<div id="circle-vis"></div>
+
+<img src="img/ukraine.svg" width="600" />
+<script src="lib/d3/d3.min.js"></script>
+<script>
+
+var margin = {top: 0, right: 10, bottom: 20, left: 10},
+    width = 960 - margin.left - margin.right,
+    height = 80 - margin.top - margin.bottom;
+
+var xScale = d3.time.scale()
+    .domain([new Date(2014, 0, 1), new Date(2015, 11, 31)])
+    .range([0, width]);
+
+var xAxis = d3.svg.axis()
+    .scale(xScale)
+    .orient("bottom")
+    .ticks(d3.time.months)
+    .tickSize(16, 0)
+    .tickFormat(d3.time.format("%b"));
+
+var timeVis = d3.select("#time-scale").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var boxVis = d3.select("#box-vis").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", 150 + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var circleVis = d3.select("#circle-vis").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", 140 + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// 65 152 total 650
+
+for(var i=1;i<=65;i++){
+    boxVis.append("rect")
+        .attr("x",i*14)
+        .attr("y",15)
+        .attr("height", 10)
+        .attr("width", 10)
+        .style("fill","#ff0000");
+
+}
+for(var i=1;i<=65;i++){
+    for(var j=1;j<=2;j++){
+        boxVis.append("rect")
+        .attr("x",i*14)
+        .attr("y",15+j*15)
+        .attr("height", 10)
+        .attr("width", 10)
+        .style("fill","#494949");
+    }
+}
+for(var i=1;i<=65;i++){
+    boxVis.append("rect")
+        .attr("x",i*14)
+        .attr("y",60)
+        .attr("height", 10)
+        .attr("width", 10)
+        .style("fill",function(){
+            if(i<=22){
+                return "#494949";
+            }else{
+                return "#dfdfdf"
+            }
+        });
+
+}
+for(var i=1;i<=65;i++){
+    for(var j=1;j<=6;j++){
+        boxVis.append("rect")
+        .attr("x",i*14)
+        .attr("y",60+j*15)
+        .attr("height", 10)
+        .attr("width", 10)
+        .style("fill","#dfdfdf");
+    }
+}
+
+circleVis.append("circle")
+    .attr("cx",150)
+    .attr("cy", 50)
+    .attr("r", 50)
+    .style("fill","#ff0000");
+circleVis.append("text")
+    .attr("x",120)
+    .attr("y", 70)
+    .style("font","Helvetica Neue")
+    .style("font-size",60).style("font-weight","bold")
+    .style("fill","#ffffff")
+    .text("65");
+circleVis.append("text")
+    .attr("x",110)
+    .attr("y", 130)
+    .style("font","Helvetica Neue")
+    .style("font-size",30).style("font-weight","bold")
+    .style("fill","#ff0000")
+    .text("Killed");
+
+
+circleVis.append("circle")
+    .attr("cx",300)
+    .attr("cy", 50)
+    .attr("r", 50)
+    .style("fill","#494949");
+circleVis.append("text")
+    .attr("x",255)
+    .attr("y", 70)
+    .style("font","Helvetica Neue")
+    .style("font-size",60).style("font-weight","bold")
+    .style("fill","#ffffff")
+    .text("152");
+circleVis.append("text")
+    .attr("x",245)
+    .attr("y", 130)
+    .style("font","Helvetica Neue")
+    .style("font-size",30).style("font-weight","bold")
+    .style("fill","#494949")
+    .text("Wounded");
+
+circleVis.append("circle")
+    .attr("cx",450)
+    .attr("cy", 50)
+    .attr("r", 50)
+    .style("fill","#dfdfdf");
+circleVis.append("text")
+    .attr("x",405)
+    .attr("y", 70)
+    .style("font","Helvetica Neue")
+    .style("font-size",60).style("font-weight","bold")
+    .style("fill","#494949")
+    .text("650");
+circleVis.append("text")
+    .attr("x",395)
+    .attr("y", 130)
+    .style("font","Helvetica Neue")
+    .style("font-size",30).style("font-weight","bold")
+    .style("fill","#dfdfdf")
+    .text("Incidents");
+
+
+timeVis.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+  .selectAll(".tick text")
+    .style("text-anchor", "start")
+    .attr("x", 6)
+    .attr("y", 6);
+
+    d3.csv("data/ied_text.csv", function(data) {
+
+        // Prepare the data
+        var format = d3.time.format("%m/%d/%Y");
+        var killed_wounded = [];
+        data.forEach(function (d, i) {
+            d.date = format.parse(d.date);
+            d.id = +d.id;
+            d.kia = +d.kia;
+            d.wia = +d.wia;
+
+            var index =0;
+            for(var i=0;i< d.kia;i++) {
+                killed_wounded.push({date: d.date,kia:1,wia:0,index:index++});
+            }
+            for(var i=0;i< d.wia;i++) {
+                killed_wounded.push({date: d.date,kia:0,wia:1,index:index++});
+            }
+        });
+        console.log(data);
+        console.log(killed_wounded);
+
+        var barGroup = timeVis.append("g");
+        var circleGroup = timeVis.append("g");
+
+        var bar = barGroup.selectAll("g")
+            .data(data)
+            .enter()
+            .append("g")
+            .attr("transform", function(d, i) { return "translate(" + (xScale(d.date)) + ",0)"; });
+
+        var circle = circleGroup.selectAll("g")
+            .data(killed_wounded)
+            .enter()
+            .append("g")
+            .attr("transform", function(d, i) { return "translate(" + (xScale(d.date)) + ",0)"; });
+
+        // Incidents
+        bar.append("rect")
+            .attr("class", "bar")
+            .attr("y", function(d) { return 0; })
+            .attr("height", function(d) { return 60; })
+            .attr("width", 1);
+
+        // Killed or Wounded
+        circle.append("circle")
+            .attr("class", "cirlce")
+            .attr("cx",1)
+            .attr("cy", function(d) {
+                return ((60-2)- d.index*4);
+            })
+            .attr("r", 2)
+            .style("fill",function(d) {
+                if(d.kia >0){
+                    return "#ff0000";
+                }else{
+                    return "#494949";
+                }
+
+            });
+
+
+
+
+
+
+    });
+
+</script>

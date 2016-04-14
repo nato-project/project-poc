@@ -1,7 +1,7 @@
 
 var fill = d3.scale.category20b();
-var w = 960;
-var h = 600;
+var width = 960;
+var height = 600;
 var words = [];
 var max = 250;
 var scale = 1;
@@ -17,28 +17,42 @@ var stopWords = /^(i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourse
 var punctuation = new RegExp("[" + unicodePunctuationRe + "]", "g");
 var wordSeparators = /[ \f\n\r\t\v\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000\u3031-\u3035\u309b\u309c\u30a0\u30fc\uff70]+/g;
 var discard = /^(@|https?:|\/\/)/;
-var htmlTags = /(<[^>]*?>|<script.*?<\/script>|<style.*?<\/style>|<head.*?><\/head>)/g;
-var matchTwitter = /^https?:\/\/([^\.]*\.)?twitter\.com/;
+//var htmlTags = /(<[^>]*?>|<script.*?<\/script>|<style.*?<\/style>|<head.*?><\/head>)/g;
+//var matchTwitter = /^https?:\/\/([^\.]*\.)?twitter\.com/;
 
-var svg = d3.select("#vis").append("svg").attr("width", w).attr("height", h);
+var svg = d3.select("#vis").append("svg").attr("width", width).attr("height", height);
 var background = svg.append("g");
-var vis = svg.append("g").attr("transform", "translate(" + [w/2, h/2] + ")");
+var vis = svg.append("g").attr("transform", "translate(" + [width/2, height/2] + ")");
 
 var ied_text;
 var incidents = [];
 
 function parseText(allwords) {
     tags = {};
-    var e = {};
-    allwords.split(wordSeparators).forEach(function(t) {
-        discard.test(t) || (t = t.replace(punctuation, ""), stopWords.test(t.toLowerCase()) || (t = t.substr(0, maxLength), e[t.toLowerCase()] = t, tags[t = t.toLowerCase()] = (tags[t] || 0) + 1))
+    var tag_index = {};
+    // Split all words into individual words and remove unwanted characters
+    allwords.split(wordSeparators)
+        .forEach(function(word) {
+            //console.log(discard.test(word));
+            //discard.test(word) || (word = word.replace(punctuation, ""),stopWords.test(word.toLowerCase()) || (word = word.substr(0, maxLength), tag_index[word.toLowerCase()] = word, tags[word = word.toLowerCase()] = (tags[word] || 0) + 1));
+            if (!discard.test(word)) {
+                word = word.replace(punctuation, "");
+                if (!stopWords.test(word.toLowerCase())) {
+                    word = word.substr(0, maxLength);
+                    tag_index[word.toLowerCase()] = word;
+                    word = word.toLowerCase();
+                    tags[word] = (tags[word] || 0) + 1;
+                }
+            }
+        });
+    tags = d3.entries(tags).sort(function(a, b) {
+        return b.value - a.value;
     });
-    tags = d3.entries(tags).sort(function(t, e) {
-        return e.value - t.value
+    tags.forEach(function(tag) {
+        tag.key = tag_index[tag.key]
     });
-    tags.forEach(function(t) {
-        t.key = e[t.key]
-    });
+    console.log(tags);
+    console.log(tag_index);
     generate()
 }
 
@@ -67,11 +81,11 @@ function draw(t, e) {
     scale =1;
     words = t;
 
-    var n = vis.selectAll("text")
+    var text = vis.selectAll("text")
         .data(words, function(t) {
         return t.text.toLowerCase()
     });
-    n.transition()
+    text.transition()
         .duration(1000)
         .attr("transform", function(t) {
             return "translate(" + [t.x, t.y] + ")rotate(" + t.rotate + ")"
@@ -79,7 +93,7 @@ function draw(t, e) {
         .style("font-size", function(t) {
             return t.size + "px"
         });
-    n.enter()
+    text.enter()
         .append("text")
         .attr("text-anchor", "middle")
         .attr("transform", function(t) {
@@ -91,7 +105,7 @@ function draw(t, e) {
         .style("font-size", function(t) {
             return t.size + "px"
         });
-    n.style("font-family", function(t) {
+    text.style("font-family", function(t) {
             return t.font
         })
         .style("fill", function(t) {
@@ -119,25 +133,29 @@ function draw(t, e) {
             console.log(incidents);
         });
 
-    var a = background.append("g").attr("transform", vis.attr("transform"));
-    var r = a.node();
-    n.exit()
+
+
+    text.exit()
         .each(function() {
             r.appendChild(this)
     });
-    a.transition()
+
+    background.append("g")
+        .attr("transform", vis.attr("transform"))
+        .transition()
         .duration(1000)
-        .style("opacity", 1e-6)
+        .style("opacity", 0)
         .remove();
+
     vis.transition()
         .delay(1000)
         .duration(750)
-        .attr("transform", "translate(" + [w/2, h/2] + ")scale(" + scale + ")")
+        .attr("transform", "translate(" + [width/2, height/2] + ")scale(" + scale + ")")
 }
 
 var layout = d3.layout.cloud()
     .timeInterval(10)
-    .size([w, h])
+    .size([width, height])
     .fontSize(function(t) {
         return fontSize(+t.value)
     }).text(function(t) {
@@ -145,11 +163,11 @@ var layout = d3.layout.cloud()
     }).on("word", progress).on("end", draw);
 
 d3.csv("ied_text.csv", function(error, data) {
-    console.log(data);
+    //console.log(data);
     ied_text = data;
 
     var corpus = ied_text.map(function(d){ return d.text;}).join(' ');
-    console.log(corpus);
+    //console.log(corpus);
     parseText(corpus);
 });
 
