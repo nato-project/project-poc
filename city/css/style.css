@@ -1,0 +1,41 @@
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+ }
+
+ .axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+
+.line {
+	stroke-width: 2;
+	fill: none;
+}
+
+#heatMatrixVis {
+    position: absolute;
+    left: 10px;
+    top: 210px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#timeBarChartVis {
+    position: absolute;
+    left: 10px;
+    top: 100px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#cityBarChartVis {
+    position: absolute;
+    left: 965px;
+    top: 210px;
+    padding: 0px;
+    margin: 0px;
+}
