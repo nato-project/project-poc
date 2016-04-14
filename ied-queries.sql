@@ -1,6 +1,19 @@
 select distinct region from ied
 
+select * from ied where map_xml is null
+
 select * from ied where LOCATION_LAT is null
+
+update ied set region='LUHANSK' where region='MIKOLAYIV'
+
+select * from ied where city='Nikolaev' -- 	Zaporizhia
+
+update ied set region='ZAPORIZHIA',map_xml=null where region='ZAPORIZHYE'
+
+select * from ied where region='ZAPORIZHYE'
+
+
+update ied set city='Nikolaev' where city='Nikolayevshchina'
 
 select id,date,type,kia,wia,text from ied
 
@@ -26,7 +39,7 @@ update ied set region='KIEV' where region='¾KIEV'
 update ied set country='UKRAINE' where country='UKRAINE¾'
 
 
---u pdate ied set map_xml=null where LOCATION_LAT is null
+--update ied set map_xml=null where LOCATION_LAT is null
 
 update ied set [type]=rtrim([type])
 
@@ -35,4 +48,7 @@ update ied set [type]=rtrim([type])
 ZAPORIZHYE => ZAPOROZHYE 
 MIKOLAYIV => MYKOLAIV
 LUHANKS=> LUGANSK
+
+
+select id,[date],[type],kia,wia,city,region,[text],LOCATION_LAT as lat,LOCATION_LNG lng from ied
 
