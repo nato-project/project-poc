@@ -44,7 +44,6 @@ Map.prototype.initVis = function(){
     vis.colors = d3.scale.quantize().domain([0,1]).range(colorbrewer.Blues[7]);
     vis.typeScale = d3.scale.linear().range([0,1]);
 
-
     // Legend data
     var legendColors = vis.colors.range();
     var legendValues = [0];
@@ -118,6 +117,13 @@ Map.prototype.initVis = function(){
     // Create circles group
     vis.circlesG = vis.svg.append("g");
 
+    // Add random translations to IED data to avoid perfect overlap
+    vis.iedData.forEach(function(d) {
+    	// Ramdomly spread it around the center point up to 4 pixels
+    	d.tx = 8*(Math.random()-0.5);
+    	d.ty = 8*(Math.random()-0.5);
+    });
+    
     // Wrangle and update
     vis.wrangleData();
 
@@ -131,8 +137,8 @@ Map.prototype.wrangleData = function() {
     vis.displayData = vis.iedData;
     if (vis.filter.length > 0) {
         vis.displayData = vis.iedData.filter(function (d) {
-            var first = new Date(d.DATE) >= vis.filter[0];
-            var second = new Date(d.DATE) <= vis.filter[1];
+            var first = new Date(d.date) >= vis.filter[0];
+            var second = new Date(d.date) <= vis.filter[1];
             return first && second;
         });
     }
@@ -156,7 +162,7 @@ Map.prototype.updateVis = function() {
             // Color
             var data;
             regionData.forEach(function(r) {
-                if (r.ID == d.id) data = r;
+                if (r.region_id == d.id) data = r;
             });
             if (data) {
                 var value = data[vis.dataType];
@@ -186,18 +192,20 @@ Map.prototype.updateVis = function() {
         .attr("class", "iedEventCircle");
 
     // Update
-    circ.attr("id", function(d) { return d.ID;})
-        .attr("cx", function(d) {return vis.proj([d.LOCATION_LNG, d.LOCATION_LAT])[0];})
-        .attr("cy", function(d) {return vis.proj([d.LOCATION_LNG, d.LOCATION_LAT])[1];})
-        .attr("r", 10)
+    circ.attr("id", function(d) { return d.id;})
+        .attr("cx", function(d) {
+        	return d.tx + vis.proj([d.lng, d.lat])[0];})
+        .attr("cy", function(d) {
+        	return d.ty + vis.proj([d.lng, d.lat])[1];})
+        .attr("r", 4)
         .attr("fill",function(d) {
-            if (d.KIA > 0) return "red";
-            if (d.WIA > 0) return "orange";
+            if (d.kia > 0) return "red";
+            if (d.wia > 0) return "orange";
             return "grey";
         })
         .attr("stroke", "black")
         .attr("stroke-width", 1)
-        .attr("opacity",0.2);
+        .attr("opacity", 1);
 
     // Exit
     circ.exit().remove();

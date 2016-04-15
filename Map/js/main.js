@@ -6,81 +6,94 @@ var regionData = [];
 
 // Variables for the visualization instances
 var mapVis, timelineVis;
-var dsv = d3.dsv(";", "text/plain");
+//var dsv = d3.dsv(";", "text/plain");
 
 // Start application by loading the data
 queue()
 	.defer(d3.json, "data/ukraine.json")
-	.defer(dsv, "data/IED Map Data - All.csv")
-	.await(function(error, mapTopoJson, iedDataCsv) {
+	.defer(d3.csv, "data/ied_data.csv")
+	.defer(d3.csv, "data/region_stats.csv")
+	.await(function(error, mapTopoJson, iedDataCsv, regionDataCsv) {
 
 		// Date parser to convert strings to date objects
-		var parseDate = d3.time.format("%d/%m/%Y").parse;
+		var parseDate = d3.time.format("%m/%d/%Y").parse;
 
 		// Convert numeric values to 'numbers'
 		iedDataCsv.forEach(function(d) {
-			d.KIA = +d.KIA;
-			d.WIA = +d.WIA;
-			d.ID = +d.ID;
-			d.LOCATION_LAT = parseFloat(d.LOCATION_LAT.replace(',','.'));
-			d.LOCATION_LNG = parseFloat(d.LOCATION_LNG.replace(',','.'));
-			d.DATE = parseDate(d.DATE);
+			d.kia = +d.kia;
+			d.wia = +d.wia;
+			d.id = +d.id;
+			d.lat = parseFloat(d.lat);
+			d.lng = parseFloat(d.lng);
+			d.date = parseDate(d.date);
 		});
 		iedData = iedDataCsv;
-
+		regionDataCsv.forEach(function(d) {
+			d.area = +d.area;
+			d.population = +d.population;
+			d.pop_density = parseFloat(d.pop_density);
+		});
+		regionData = regionDataCsv;
+		console.log(iedData);
+		
 		// Copy topo json data
 		mapData = mapTopoJson;
 		console.log(mapData);
-
-		console.log(iedData);
-		// Organize region data for region coloring
+		
+		// Add IED events to region data for region coloring
 		var idMap = {};
 		iedData.forEach(function(d) {
-			var region = d.REGION.trim(); // Remove whitespaces in some names
-
-			var regionId = convertRegion2Id(region);
-
+			var regionId = d.region_id;
+			if (regionId)
+			
 			if (idMap[regionId] == null) {
-				var regionObj = {};
-				regionObj.ID = regionId;
-				regionObj.IEDevents = 1;
-				regionObj.KIA = d.KIA;
-				regionObj.WIA = d.WIA;
-				idMap[regionId] = regionData.length;
-				regionData.push(regionObj);
+				// Get region index in the table
+				var regionIndex = regionData.findIndex(function(d) {return d.region_id == regionId;});
+
+				if (regionIndex != -1) {
+					// Insert IED data
+					regionData[regionIndex].IEDevents = 1;
+					regionData[regionIndex].KIA = d.kia;
+					regionData[regionIndex].WIA = d.wia;
+					idMap[regionId] = regionIndex;
+				}
+				else {
+					// Create the region data
+					var regionObj = {};
+					regionObj.region_id = regionId;
+					regionObj.IEDevents = 1;
+					regionObj.KIA = d.kia;
+					regionObj.WIA = d.wia;
+					idMap[regionId] = regionData.length;
+					regionData.push(regionObj);
+				}
 			}
 			else {
+				// Increase IED data
 				regionData[idMap[regionId]].IEDevents += 1;
-				regionData[idMap[regionId]].KIA += d.KIA;
-				regionData[idMap[regionId]].WIA += d.WIA;
+				regionData[idMap[regionId]].KIA += d.kia;
+				regionData[idMap[regionId]].WIA += d.wia;
 			}
 		});
 		console.log(regionData);
 
 		// Create the visualizations
 		createVis();
-
 	})
 
-
 function createVis() {
-
 	// Instantiate visualization objects here
 	mapVis = new Map("mapVis", iedData, mapData, regionData);
 	timelineVis = new Timeline("timelineVis", iedData);
-
 }
 
-
 function brushed() {
-
 	// Set new domain if brush (user selection) is not empty
 	mapVis.filter = timelineVis.brush.empty() ? [] : timelineVis.brush.extent();
 
 	// Update map
 	mapVis.wrangleData();
 }
-
 
 function regionColorSelect() {
 
@@ -90,100 +103,4 @@ function regionColorSelect() {
 		mapVis.dataLabel = selectBox.options[selectBox.selectedIndex].text;
 		mapVis.updateVis();
 	}
-}
-
-
-function convertRegion2Id(regionName) {
-
-	var regionId = "";
-	//Big switch to get region id
-	switch(regionName) {
-		case "CRIMEA": // 0
-			regionId = "crimea";
-			break;
-		case "MIKOLAYIV": // 1
-			regionId = "mk";
-			break;
-		case "MIKOLAYV": // 1
-			regionId = "mk";
-			break;
-		case "CHERNIHIV": //2
-			regionId = "cn";
-			break;
-		case "RIVNE": // 3
-			regionId = "rv";
-			break;
-		case "CHERNIVTSI": // 4
-			regionId = "cv";
-			break;
-		case "IVANO-FRANKIVSK": //5
-			regionId = "if";
-			break;
-		// No data for 6 km
-		case "LVIV": // 7
-			regionId = "lviv";
-			break;
-		case "TERNOPOL": // 8
-			regionId = "te";
-			break;
-		case "ZAKARPATS'KA": // 9
-			regionId = "uz";
-			break;
-		case "VOLYN": // 10
-			regionId = "volyn";
-			break;
-		case "CHERKASY": // 11
-			regionId = "ck";
-			break;
-		// No data for 12 kr
-		case "KIEV": // 13
-			regionId = "kiev";
-			break;
-		case "�KIEV": // 13
-			regionId = "kiev";
-			break;
-		case "ODESSA": // 14
-			regionId = "od";
-			break;
-		case "VINNYTSIA": // 15
-			regionId = "vn";
-			break;
-		case "ZHITOMYR": // 16
-			regionId = "zt";
-			break;
-		case "ZHYTOMYR": // 16
-			regionId = "zt";
-			break;
-		case "SUMY": // 17
-			regionId = "sm";
-			break;
-		case "DNIPROPETROVSK": // 18
-			regionId = "dp";
-			break;
-		case "DONETSK": // 19
-			regionId = "dn";
-			break;
-		case "KHARKIV": // 20
-			regionId = "kh";
-			break;
-		case "LUHANKS": // 21
-			regionId = "lg";
-			break;
-		case "LUHANSK": // 21
-			regionId = "lg";
-			break;
-		case "POLTAVA": // 22
-			regionId = "pl";
-			break;
-		case "ZAPORIZHYE": // 23
-			regionId = "zp";
-			break;
-		case "KHERSON": // 24
-			regionId = "ks";
-			break;
-		default:
-		//
-	}
-
-	return regionId;
 }

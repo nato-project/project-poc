@@ -35,11 +35,11 @@ Timeline.prototype.initVis = function(){
 	// Scales and axes
 	vis.x = d3.time.scale()
 	  	.range([0, vis.width])
-	  	.domain(d3.extent(vis.data, function(d) {return d.DATE;}));
+	  	.domain(d3.extent(vis.data, function(d) {return d.date;}));
 
 	vis.y = d3.scale.linear()
 		.range([vis.height, 0])
-		.domain([0, d3.max(vis.data, function(d) {return d.KIA + d.WIA;})]);
+		.domain([0, d3.max(vis.data, function(d) {return d.kia + d.wia;})]);
 
 	vis.xAxis = d3.svg.axis()
 		.scale(vis.x)
@@ -51,12 +51,12 @@ Timeline.prototype.initVis = function(){
 		.data(vis.data)
 		.enter().append("circle")
 		.attr("cx", function(d) {
-			if (d.DATE) return vis.x(d.DATE);})
-		.attr("cy", function(d) {return vis.y(d.KIA + d.WIA);})
+			if (d.date) return vis.x(d.date);})
+		.attr("cy", function(d) {return vis.y(d.kia + d.wia);})
 		.attr("r", 5)
 		.attr("fill",function(d) {
-			if (d.KIA > 0) return "red";
-			if (d.WIA > 0) return "orange";
+			if (d.kia > 0) return "red";
+			if (d.wia > 0) return "orange";
 			return "grey";
 		});
 

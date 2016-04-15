@@ -6,27 +6,22 @@ var matrixW = 800, matrixH = 800;
 
 // Variables for the visualization instances
 var timeBarChartVis, cityBarChartVis, heatMatrixVis;
-var dsv = d3.dsv(";", "text/plain");
+//var dsv = d3.dsv(";", "text/plain");
 
 // Start application by loading the data
-// Load CSV file
-var mapVis, timelineVis;
-var dsv = d3.dsv(";", "text/plain");
-
-// Start application by loading the data
-dsv("data/IED Map Data - All.csv", function(error, iedDataCsv) {
+d3.csv("data/ied_data.csv", function(error, iedDataCsv) {
 
 		// Date parser to convert strings to date objects
-		var parseDate = d3.time.format("%d/%m/%Y").parse;
-	console.log(iedDataCsv);
+		var parseDate = d3.time.format("%m/%d/%Y").parse;
+	
 		// Convert numeric values to 'numbers'
 		iedDataCsv.forEach(function(d) {
-			d.KIA = +d.KIA;
-			d.WIA = +d.WIA;
-			d.ID = +d.ID;
-			d.LOCATION_LAT = parseFloat(d.LOCATION_LAT.replace(',','.'));
-			d.LOCATION_LNG = parseFloat(d.LOCATION_LNG.replace(',','.'));
-			d.DATE = parseDate(d.DATE);
+			d.kia = +d.kia;
+			d.wia = +d.wia;
+			d.id = +d.id;
+			d.lat = parseFloat(d.lat);
+			d.lng = parseFloat(d.lng);
+			d.date = parseDate(d.date);
 		});
 		iedData = iedDataCsv;
 
@@ -37,20 +32,19 @@ dsv("data/IED Map Data - All.csv", function(error, iedDataCsv) {
 		// Create the visualizations
 		createVis();
 
-	})
-
+	});
 
 function arrangeDataByCity() {
 
 	var idMap = {};
 	var cityData= [];
 	iedData.forEach(function(d) {
-		var cityName = d.CITY.trim(); // Remove whitespaces in some names
+		var cityName = d.city.trim(); // Remove whitespaces in some names
 		if (idMap[cityName] == null) {
 			var cityObj = {};
 			cityObj.ID = cityName;
 			cityObj.IEDeventTotal = 1;
-			var monthIndex = getMonthIndex(d.DATE);
+			var monthIndex = getMonthIndex(d.date);
 			cityObj.IEDevents = new Array(24).fill(0);
 			cityObj.IEDevents[monthIndex] += 1;
 			idMap[cityName] = cityData.length;
@@ -58,7 +52,7 @@ function arrangeDataByCity() {
 		}
 		else {
 			cityData[idMap[cityName]].IEDeventTotal += 1;
-			var monthIndex = getMonthIndex(d.DATE);
+			var monthIndex = getMonthIndex(d.date);
 			cityData[idMap[cityName]].IEDevents[monthIndex] += 1;
 		}
 	});
@@ -70,9 +64,7 @@ function arrangeDataByCity() {
 
 	// Keep top cities
 	topCityData = sortedCityData.slice(0, 50);
-
 }
-
 
 function getMonthIndex(date) {
 	// 01-11 for 2014, 12-23 for 2015
@@ -81,14 +73,9 @@ function getMonthIndex(date) {
 	return monthIndex;
 }
 
-
 function createVis() {
-
-
 	// Instantiate visualization objects here
-	//timeBarChartVis, cityBarChartVis, heatMatrixVis;
 	timeBarChartVis = new TimeBarChart("timeBarChartVis", topCityData);
 	cityBarChartVis = new CityBarChart("cityBarChartVis", topCityData);
 	heatMatrixVis = new HeatMatrix("heatMatrixVis", topCityData);
-
 }
