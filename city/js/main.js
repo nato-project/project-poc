@@ -40,7 +40,10 @@ function arrangeDataByCity() {
 	var cityData= [];
 	iedData.forEach(function(d) {
 		var cityName = d.city.trim(); // Remove whitespaces in some names
-		if (idMap[cityName] == null) {
+		if (cityName == "NULL") {
+			// Do not include unidentified cities
+		}
+		else if (idMap[cityName] == null) {
 			var cityObj = {};
 			cityObj.ID = cityName;
 			cityObj.IEDeventTotal = 1;
@@ -63,7 +66,7 @@ function arrangeDataByCity() {
 	var sortedCityData = cityData.sort(function(a,b) {return b.IEDeventTotal- a.IEDeventTotal;});
 
 	// Keep top cities
-	topCityData = sortedCityData.slice(0, 50);
+	topCityData = sortedCityData.slice(0, 35);
 }
 
 function getMonthIndex(date) {

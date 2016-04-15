@@ -19,7 +19,7 @@
 #heatMatrixVis {
     position: absolute;
     left: 10px;
-    top: 210px;
+    top: 230px;
     padding: 0px;
     margin: 0px;
 }
@@ -35,7 +35,7 @@
 #cityBarChartVis {
     position: absolute;
     left: 965px;
-    top: 210px;
+    top: 230px;
     padding: 0px;
     margin: 0px;
 }

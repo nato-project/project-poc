@@ -20,7 +20,7 @@ TimeBarChart = function(_parentElement, _data, _margin){
 TimeBarChart.prototype.initVis = function(){
     var vis = this; // read about the this
 
-    vis.margin = {top: 5, right: 5, bottom: 5, left: 150};
+    vis.margin = {top: 15, right: 5, bottom: 15, left: 150};
 
     vis.width = matrixW;
     vis.height = 100;
@@ -61,5 +61,31 @@ TimeBarChart.prototype.initVis = function(){
         .attr("width", colWidth-1)
         .attr("height", function(d) {return vis.yScale(d);})
         .style("fill", "orange");
+    
+    // Create bar labels
+    vis.svg.append("g").selectAll(".monthBarLabel")
+    .data(vis.barData)
+    .enter()
+    .append("text")
+    .attr("class", "monthBarLabel")
+    .attr("x", function(d,i) {return (i+0.5)*colWidth-8;})
+    .attr("y", function(d) {return vis.height-vis.yScale(d)-3;})
+    .text(function(d) {return d;});
+
+    // Custom bar axis labels
+    vis.svg.append("g").selectAll(".monthLabel")
+    .data(vis.barData)
+    .enter()
+    .append("text")
+    .attr("class", "monthLabel")
+    .attr("x", function(d,i) {return (i)*colWidth+5;})
+    .attr("y", function(d) {return vis.height+11;})
+    .text(function(d,i) {
+    	var year = i>11 ? "15" : "14";
+    	var month = i>11 ? (i-11): i+1;
+    	return month + "/" + year;
+    })
+    .style("font-size", "10px");
+
 }
 

@@ -20,7 +20,7 @@ CityBarChart = function(_parentElement, _data, _margin){
 CityBarChart.prototype.initVis = function(){
     var vis = this; // read about the this
 
-    vis.margin = {top: 5, right: 5, bottom: 5, left: 5};
+    vis.margin = {top: 5, right: 20, bottom: 5, left: 5};
 
     vis.width = 200;
     vis.height = matrixH;
@@ -56,5 +56,15 @@ CityBarChart.prototype.initVis = function(){
         .attr("width", function(d) {return vis.xScale(d);})
         .attr("height", rowHeight-1)
         .style("fill", "orange");
+
+    // Create bar labels
+    vis.svg.append("g").selectAll(".cityBarLabel")
+    .data(vis.barData)
+    .enter()
+    .append("text")
+    .attr("class", "cityBarLabel")
+    .attr("x", function(d) {return 3+vis.xScale(d);})
+    .attr("y", function(d,i) {return (i+0.5)*rowHeight + 5;})
+    .text(function(d) {return d;});
 }
 
