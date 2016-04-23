@@ -4,14 +4,15 @@ from sklearn.feature_extraction.text import CountVectorizer;
 from sklearn.feature_extraction.text import TfidfTransformer;
 from sklearn.metrics.pairwise import cosine_similarity;
 import json;
+import csv;
 
 
 # Load the IED data from csv
-df = pd.read_csv('ied2.csv',encoding='ISO-8859-1');
+df = pd.read_csv('ied_data.csv',encoding='ISO-8859-1');
 print(df.columns.values);
-corpus = list(df["TEXT"]);
-ids = list(df["ID"]);
-types = list(df["TYPE"]);
+corpus = list(df["text"]);
+ids = list(df["id"]);
+types = list(df["type"]);
 print(types[0])
 
 # Vectorize the IED Text using 1-grams (individual words)
@@ -20,7 +21,7 @@ vectorizer = CountVectorizer(min_df=1)
 # Information Retrieval using Bag of Words model
 bag_of_words = vectorizer.fit_transform(corpus);
 bow_features = vectorizer.get_feature_names();
-print("Bag of Words: ",len(bow_features));
+print("Bag of Words: ",len(bow_features),bow_features);
 
 # Find the Term Frequency Counts:
 tf_counts = bag_of_words.toarray();
@@ -141,7 +142,7 @@ for index, row in df_cluster_nodes.iterrows():
     nodes.append({"name":row['name'],"id":row['node'],"type":row['type'],"word":"","group":row['group']});
 
 for index, row in df_links.iterrows():
-    print(row["source"],row["target"],row['value']);
+    #print(row["source"],row["target"],row['value']);
     links.append({"source":node_array.index(row["source"]),"target":node_array.index(row["target"]),"value":1,"source_type":row['source_type']});
 
 
@@ -156,3 +157,23 @@ return_json["nodes"] = nodes;
 return_json["links"] = links;
 with open('text-features.json','w') as outfile:
     json.dump(return_json,outfile);
+
+#print(df_links[(df_links.source == 50) & (df_links.target == 56)]);
+
+# Write to CSV
+# with open('outfile.csv', 'w', newline='') as csvfile:
+#     csvwriter = csv.writer(csvfile, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
+#     csvwriter.writerow(['s_id', 't_id', 'cs_value']);
+#     cs_links = pd.DataFrame(columns=('s_id', 't_id','cs_value'));
+#     for r in range(0, tfidf_matrix.shape[0]):
+#             cs = cosine_similarity(tfidf_matrix[r:r+1], tfidf_matrix);
+#             for c in range(0, cs.shape[1]):
+#                 if (r != c) and (cs[0,c] > 0):
+#                     if any(cs_links[(cs_links['s_id'] == int(ids[c])) & (cs_links['t_id'] == int(ids[r]))]):
+#                         #csvwriter.writerow([ids[r], ids[c], cs[0,c]]);
+#                         x =0;
+#                     else:
+#                         cs_links.loc[len(cs_links)] = {"s_id":int(ids[r]),"t_id":int(ids[c]),"value":round(cs[0,c],4)};
+#                         csvwriter.writerow([ids[r], ids[c], cs[0,c]]);
+
+
